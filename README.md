@@ -58,28 +58,37 @@ Socket programming finds applications in various domains, including web developm
 import socket
 import threading
 import time 
+
 def server():
-    s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.bind(("127.0.0.1",5000))
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.bind(("127.0.0.1", 5000))
     s.listen(1)
     print("server waiting")
 
-    conn, addr=s.accept()
-    print("connected by :",addr)
-    data=conn.recv(1024)
-    print("client says: ",data.decode())
+    conn, addr = s.accept()
+    print("connected by :", addr)
 
-    conn.send("hello from server ".encode())
+    data = conn.recv(1024).decode()
+    print("client says:", data)
+
+    # Simple login check
+    if "sabari" in data and "1234" in data:
+        reply = "Login Successful"
+    else:
+        reply = "Invalid Credentials"
+
+    conn.send(reply.encode())
+
     conn.close()
     s.close()
 
 def client():
-    time.sleep(1)  # wait for server to start
+    time.sleep(1)
 
     c = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     c.connect(("127.0.0.1", 5000))
 
-    c.send("Hello from client".encode())
+    c.send("Username: sabari | Password: 1234".encode())
 
     response = c.recv(1024)
     print("Server says:", response.decode())
@@ -96,7 +105,6 @@ server_thread.join()
 client_thread.join()
 ```
 ## Output:
-<img width="1095" height="220" alt="image" src="https://github.com/user-attachments/assets/8625ccd3-3e00-4b67-a856-d1e7049d6de2" />
-
+<img width="1115" height="230" alt="image" src="https://github.com/user-attachments/assets/e2a3574e-4c37-47e4-bdd2-e3efdae03c80" />
 ## Result:
 Thus the study of Socket Programming Completed Successfully
